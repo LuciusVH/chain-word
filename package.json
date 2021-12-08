@@ -4,12 +4,19 @@
   "description": "job interview challenge",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "compile-sass": "sass --watch scss:assets/css"
   },
   "author": "Richard Lebigot",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "autoprefixer": "^10.4.0",
+    "express": "^4.17.1",
+    "postcss-cli": "^9.0.2",
+    "socket.io": "^4.4.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15",
+    "sass": "^1.44.0"
   }
 }
