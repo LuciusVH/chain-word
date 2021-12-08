@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Chain Game</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="https://cdn.socket.io/4.4.0/socket.io.min.js" integrity="sha384-1fOn6VtTq3PWwfsOrk45LnYcGosJwzMHv+Xh/Jx5303FVOXzEnw0EpLv30mtjmlj" crossorigin="anonymous"></script>
+  </head>
+
+  <body>
+
+    <div id="game-canvas">
+      <h1>Word Chain Game :)</h1>
+      <ul class="players">
+        <li>Player 1</li>
+        <li>Player 2</li>
+      </ul>
+      <div id="game-wrapper">
+        <span id="word">Test</span>
+        <form id="game">
+          <label for="wordInput"></label>
+          <input type="text" id="wordInput" name="wordInput" required autofocus>
+          <button>Submit</button>
+        </form>
+      </div>
+
+    </div>
+
+    <!-- JS SCRIPTS -->
+    <script src="client.js "></script>
+  </body>
+
+</html>
