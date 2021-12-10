@@ -7,12 +7,17 @@
 // COLORS
 $primary: hsla(120, 2%, 88%, 1);
 $secondary: hsla(33, 90%, 55%, 1);
+body {
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 // GAME CANVAS
 #game-canvas {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   width: 350px;
   height: 80vh;
   background-color: $primary;
@@ -20,8 +25,15 @@ $secondary: hsla(33, 90%, 55%, 1);
   border-radius: 1rem;
   text-align: center;
   .players {
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    grid-template-columns: repeat(2, auto);
     list-style-type: none;
     padding: 0;
+    padding-bottom: 20px;
+    margin: 0;
+    height: 60px;
     li {
       display: inline-block;
     }

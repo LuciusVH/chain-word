@@ -8,6 +8,7 @@ function existingWord(user_input) {
   return wordsArray.includes(user_input);
 }
 
+// Exports
 module.exports = {
   existing_word: existingWord,
 }
