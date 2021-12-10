@@ -8,7 +8,8 @@ const io = require('socket.io')(server, {
     origin: "*"
   }
 });
-const game = require('./game.js');
+const game = require('./src/js/game.js');
+const db = require('./src/js/db');
 
 // Express static files
 let options = {
@@ -19,11 +20,11 @@ let options = {
   maxAge: "7d",
   redirect: false
 }
-app.use(express.static(path.join(__dirname, 'public'), options));
+app.use(express.static(path.join(__dirname, 'dist'), options));
 
 // Routes
 app.get('', function(req, res) {
-  res.sendFile(__dirname + '/public/index.html');
+  res.sendFile(__dirname + '/dist/index.html');
 });
 
 // Socket IO
