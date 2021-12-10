@@ -8,8 +8,8 @@ const io = require('socket.io')(server, {
     origin: "*"
   }
 });
-const game = require('./src/js/game.js');
-const db = require('./src/js/db');
+const game = require('./src/js/game');
+const { dbConnect } = require('./src/js/db');
 
 // Express static files
 let options = {
@@ -30,6 +30,7 @@ app.get('', function(req, res) {
 // Socket IO
 io.on('connection', socket => {
   console.log("User connected: " + socket.id);
+  dbConnect();
 
   // Is fired when a user submit their word
   socket.on('userInput', (user_input) => {

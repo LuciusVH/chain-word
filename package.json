@@ -5,14 +5,17 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "sass": "sass -w scss:public/css --style compressed",
-    "watch": "watchify ./public/js/client.js ./game.js -o ./public/js/bundle.js -d -t -v babelify"
+    "startDev": "nodemon app.js",
+    "sass": "sass -w ./src/scss/:dist/css/ --style compressed",
+    "watch": "watchify ./src/js/client.js ./src/js/game.js ./src/js/db.js  -o ./dist/js/bundle.js -d -t -v babelify"
   },
   "author": "Richard Lebigot",
   "license": "ISC",
   "dependencies": {
     "autoprefixer": "^10.4.0",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "mongoose": "^6.1.1",
     "postcss-cli": "^9.0.2",
     "socket.io": "^4.4.0",
     "word-list": "^3.1.0"
