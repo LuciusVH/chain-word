@@ -13,18 +13,17 @@
   <body>
 
     <div id="game-canvas">
-      <h1>Word Chain Game :)</h1>
-      <ul class="players">
-      </ul>
+      <h1>Word Chain Game</h1>
       <div id="game-wrapper">
-        <div id="word"></div>
+        <div id="word">hello! ✌️</div>
         <form id="join" class="form" action="/game" method="POST">
-          <label for="newUser"></label>
-          <input type="text" id="newUser" name="newUser" placeholder="What's your name? :)" required autofocus>
+          <label for="newPlayer"></label>
+          <input type="text" id="newPlayer" name="newPlayer" placeholder="What's your name? :)" required autofocus>
+          <label for="room"></label>
+          <input type="text" id="room" name="room" placeholder="Room token" required>
           <button>Join the game</button>
         </form>
       </div>
-
     </div>
 
     <!-- JS SCRIPTS -->

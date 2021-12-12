@@ -10,7 +10,7 @@ const io = require('socket.io')(server, {
   }
 });
 const game = require('./src/js/game');
-const { dbConnect, createUser } = require('./src/js/db');
+const { players, createPlayer2, getRoomPlayers } = require('./src/js/players');
 
 // Express static files
 let options = {
@@ -34,24 +34,24 @@ app.get('', function(req, res) {
   res.render('index');
 });
 app.post('/game', (req, res) => {
-  // Create a new user in the DB
-  const name = req.body.newUser;
-  const user_creation = createUser({ name });
-  user_creation.then(user => {
-    if (user._id) res.render('game', { name: user.name })
-  }).catch(err => {
-    console.log(err);
-  })
+  res.render('game');
 });
 
 // Socket IO
 io.on('connection', socket => {
-  console.log("User connected: " + socket.id);
-  // Connect to MongoDB
-  dbConnect();
 
   // Is fired when a user submit their name
-  socket.on('newUser', (user_input) => {})
+  socket.on('newPlayer', (player_name, room) => {
+    // Call on player creation
+    const player = createPlayer2(socket.id, player_name, 0, room);
+    socket.join(player.room);
+    console.log(players);
+
+    // Send players list update for display on client
+    io.to(player.room).emit('playersList', {
+      players: getRoomPlayers(player.room)
+    });
+  })
 
   // Is fired when a user submit their word
   socket.on('userInput', (user_input) => {

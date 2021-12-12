@@ -13,19 +13,18 @@
   <body>
 
     <div id="game-canvas">
-      <h1>Word Chain Game :)</h1>
-      <ul class="players">
-        <li>Player 1</li>
+      <h1>Word Chain Game</h1>
+      <ul id="players_list">
+        <!-- List of players here -->
       </ul>
       <div id="game-wrapper">
-        <div id="word"></div>
+        <div id="word">waiting for another player</div>
         <form id="game" class="form">
           <label for="userInput"></label>
           <input type="text" id="userInput" name="userInput" required autofocus>
-          <button>Submit</button>
+          <button type="submit" id="submit">Submit</button> <button type="button" id="forfeit">Forfeit</button>
         </form>
       </div>
-
     </div>
 
     <!-- JS SCRIPTS -->
