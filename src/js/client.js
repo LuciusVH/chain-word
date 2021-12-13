@@ -1,4 +1,4 @@
-const { previous_words, wordStorage, displayWords } = require("./game");
+const { displayWords } = require("./game");
 
 const socket = io();
 
@@ -32,30 +32,29 @@ if (forfeitBtn) {
 
 // Display & update players list
 socket.on('playersList', (players) => {
-  console.log('PLAYERS LIST EVENT RECEIVED ON CLIENT SIDE');
+  console.log(players);
   const players_list = document.getElementById('players_list');
   players_list.innerHTML = players.map(player => `<li>${player.name} - ${player.score}</li>`).join('');
 });
 
 
 // Display the inputed word on screen
-socket.on('wordValidation', (user_input, word_validation) => {
+socket.on('wordValidation', (word_validation) => {
   const word = document.querySelector("#word");
-  word.innerText = user_input;
-  // If the word is validated:
-  // 1. display the word in green
-  // 2. store it in the previous_words array
-  // 3. display the previous words used if the array contains more than 1
-  if (word_validation) {
-    word.style.color = 'green';
-    wordStorage(user_input);
-    console.log(previous_words)
-    if (previous_words.length > 1) {
-      displayWords()
-    }
-  } else {
+  word.innerText = word_validation;
+  // If the word in invalid, display the error message in red & fire the gameOver function
+  if (word_validation === 'Invalid word 😞' || word_validation === 'Word already used 😞') {
     word.style.color = 'red';
     // Game over
     //gameOver();
+
+    // Otherwise display the word in green
+  } else {
+    word.style.color = 'green';
   }
+})
+
+// Display the list of previously used words
+socket.on('previousWords', (previous_words) => {
+  displayWords(previous_words);
 })
