@@ -55,8 +55,7 @@ io.on('connection', socket => {
 
   // Is fired when a user submit their word
   socket.on('userInput', (user_input) => {
-    let word_validation = game.existing_word(user_input);
-
+    let word_validation = game.existingWord(user_input);
     io.emit('wordValidation', user_input, word_validation)
   });
 });
