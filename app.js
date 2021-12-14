@@ -10,7 +10,7 @@ const io = require('socket.io')(server, {
   }
 })
 const { wordValidation, previous_words } = require('./src/js/game');
-const { createPlayer2, getRoomPlayers, getCurrentPlayer } = require('./src/js/players');
+const { players, createPlayer, getRoomPlayers, getCurrentPlayer } = require('./src/js/players');
 
 // Express static files
 let options = {
@@ -43,25 +43,39 @@ io.on('connection', socket => {
   // Is fired when a user submit their name
   socket.on('newPlayer', (player_name, room) => {
     // Call on player creation
-    const player = createPlayer2(socket.id, player_name, 0, room);
+    const player = createPlayer(socket.id, player_name, 0, room);
     socket.join(player.room);
 
-    // Send players list update for display to all clients
-    io.in(player.room).emit('playersList', {
-      players: getRoomPlayers(player.room)
-    })
+    // Send players list update for display to all clients in the room
+    if (players) {
+      console.log('EVENT FIRED FROM SERVER'); // OK - Fired
+      io.emit('playersList', players);
+    }
+    /*
+    io.in(player.room).emit('playersList', players
+      {
+        players: getRoomPlayers(player.room)
+      }
+    )
+    */
   })
 
   // Is fired when a user submit a word
   socket.on('userInput', (user_input) => {
     // Call on word validation
     let word_validation = wordValidation(user_input);
-    let player = getCurrentPlayer(socket.id);
-    console.log(player.room);
+    //let player = getCurrentPlayer(socket.id);
+    //console.log(player.room);
     // Send the word & its validation to all clients in the room
+    io.emit('wordValidation', word_validation);
+    /*
     io.in(player.room).emit('wordValidation', word_validation);
+    */
     if (previous_words.length > 1) {
       io.emit('previousWords', previous_words);
+      /* 
+      io.in(player.room).emit('previousWords', previous_words);
+      */
     }
   })
 })

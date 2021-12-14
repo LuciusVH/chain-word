@@ -1,3 +1,4 @@
+/*
 const { connect, model, Schema } = require('mongoose');
 const { config } = require('dotenv');
 
@@ -42,3 +43,4 @@ module.exports = {
   User,
   Word
 }
+*/

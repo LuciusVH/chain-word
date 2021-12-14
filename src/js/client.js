@@ -1,4 +1,5 @@
 const { displayWords } = require("./game");
+const { updatePlayersList } = require("./players");
 
 const socket = io();
 
@@ -32,10 +33,9 @@ if (forfeitBtn) {
 
 // Display & update players list
 socket.on('playersList', (players) => {
-  console.log(players);
-  const players_list = document.getElementById('players_list');
-  players_list.innerHTML = players.map(player => `<li>${player.name} - ${player.score}</li>`).join('');
-});
+  console.log('EVENT FIRED FROM CLIENT SIDE'); // Not fired
+  updatePlayersList(players);
+})
 
 
 // Display the inputed word on screen
@@ -43,7 +43,7 @@ socket.on('wordValidation', (word_validation) => {
   const word = document.querySelector("#word");
   word.innerText = word_validation;
   // If the word in invalid, display the error message in red & fire the gameOver function
-  if (word_validation === 'Invalid word 😞' || word_validation === 'Word already used 😞') {
+  if (word_validation === 'Invalid word 😞' || word_validation === 'Word already used 😞' || word_validation === 'Nop, not chained 😞') {
     word.style.color = 'red';
     // Game over
     //gameOver();

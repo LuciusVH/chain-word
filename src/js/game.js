@@ -32,7 +32,7 @@ function wordValidation(user_input) {
   // Checking if the word hasn't been used already
   else if (previous_words.includes(user_input)) return 'Word already used 😞';
   // Checking if the inputted word is chaining with the previous word
-  //else if () 
+  else if (previous_words.length > 0 && user_input.substring(0, 1) != previous_words.slice(-1).toString().slice(-1)) return 'Nop, not chained 😞';
   // Otherwise it's all good :)
   else {
     wordStorage(user_input);
