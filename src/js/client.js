@@ -1,4 +1,4 @@
-const { displayWords } = require("./game");
+const { displayWords, gameOver } = require("./game");
 const { updatePlayersList } = require("./players");
 
 const socket = io();
@@ -26,7 +26,7 @@ const forfeitBtn = document.querySelector('#forfeit');
 if (forfeitBtn) {
   forfeitBtn.addEventListener('click', () => {
     // Game over
-    //gameOver();
+    gameOver();
   })
 }
 

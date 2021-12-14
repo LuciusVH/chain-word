@@ -41,10 +41,32 @@ function wordValidation(user_input) {
 }
 
 
+// Game over
+const Swal = require('sweetalert2')
+
+function gameOver() {
+  Swal.fire({
+    title: 'Game over',
+    text: 'Wanna replay?',
+    icon: 'error',
+    confirmButtonText: 'Yes sir!',
+    confirmButtonColor: '#F49725',
+    allowOutsideClick: false,
+    allowEscapeKey: false
+  }).then((result) => {
+    if (result.isConfirmed) {
+      socket.emit('replay');
+      // replay event to be coded
+    }
+  })
+}
+
+
 // Exports
 module.exports = {
   wordValidation,
   wordStorage,
   previous_words,
-  displayWords
+  displayWords,
+  gameOver
 }
