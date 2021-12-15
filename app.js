@@ -16,7 +16,7 @@ const io = require('socket.io')(server, {
 })
 
 const { wordValidation, previous_words } = require('./src/js/game');
-const { players, createPlayer, getCurrentPlayer } = require('./src/js/players');
+const { players, createPlayer, getCurrentPlayer, getPlayersInRoom } = require('./src/js/players');
 
 // Express static files
 let options = {
@@ -49,17 +49,19 @@ io.on('connection', socket => {
   console.log(socket.id);
 
   // Is fired when a user submit their name
-  socket.on('newPlayer', (player_name) => {
+  socket.on('newPlayer', (player_name, room_name) => {
 
     // Call on player creation
-    const player = createPlayer(socket.id, player_name, 0);
+    const player = createPlayer(socket.id, player_name, 0, room_name);
+    socket.join(player.room_name);
 
-    // Send players list update for display to all clients
-    io.emit('playersList', players);
+    // Send players list update for display to all clients in the room
+    io.to(player.room_name).emit('playersList', players);
 
-    // Start the game if 2 players have joined
-    if (players.length == 2) {
-      io.emit('gameStart', players);
+    // Start the game if 2 players have joined the same room
+    let players_in_room = getPlayersInRoom(room_name)
+    if (players_in_room.length == 2) {
+      io.to(player.room_name).emit('gameStart', players_in_room);
     }
   })
 
@@ -71,11 +73,11 @@ io.on('connection', socket => {
       let player = getCurrentPlayer(socket.id);
     }
 
-    // Send the word & its validation to all clients
-    io.emit('wordValidation', word_validation);
+    // Send the word & its validation to all clients in the room
+    io.to(player.room_name).emit('wordValidation', word_validation);
     if (previous_words.length > 1) {
-      // Show the previously used words if there are more than 1 word used to all clients
-      io.emit('previousWords', previous_words);
+      // Show the previously used words if there are more than 1 word used to all clients in the room
+      io.to(player.room_name).emit('previousWords', previous_words);
     }
   })
 })

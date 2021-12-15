@@ -22,6 +22,8 @@
         <form id="join" class="form">
           <label for="newPlayer"></label>
           <input type="text" id="newPlayer" name="newPlayer" placeholder="What's your name? :)" required autofocus>
+          <label for="room"></label>
+          <input type="text" id="room" name="room" placeholder="Room name" required>
           <button>Join the game</button>
         </form>
         <form id="game" class="form">
@@ -30,6 +32,9 @@
           <button type="submit" id="submit">Submit</button> <button type="button" id="forfeit">Forfeit</button>
         </form>
       </div>
+      <ul id="used_words">
+        <!-- Words already used go here -->
+      </ul>
     </div>
 
     <!-- JS SCRIPTS -->

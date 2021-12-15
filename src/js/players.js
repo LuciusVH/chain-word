@@ -1,8 +1,8 @@
 let players = [];
 
 // Create player
-function createPlayer(id, name, score) {
-  const player = { id, name, score };
+function createPlayer(id, name, score, room_name) {
+  const player = { id, name, score, room_name };
   console.log(player.id)
   players.push(player);
   return player;
@@ -22,6 +22,12 @@ function getCurrentPlayer(id) {
 }
 
 
+// Get players in the same room
+function getPlayersInRoom(room_name) {
+  return players.filter(player => player.room_name === room_name);
+}
+
+
 /* 
 
  *_____ EXPORTS _____*
@@ -32,5 +38,6 @@ module.exports = {
   players,
   createPlayer,
   updatePlayersList,
-  getCurrentPlayer
+  getCurrentPlayer,
+  getPlayersInRoom
 }

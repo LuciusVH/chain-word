@@ -1,16 +1,19 @@
+// Imports 
 const { displayWords, gameOver } = require("./game");
 const { updatePlayersList } = require("./players");
 const { gsap } = require("gsap/dist/gsap");
 
 
 const socket = io();
-const input_form = document.querySelector('#userInput');
 
 // Target the forms and place an event listener on each form submission
 const forms = document.querySelectorAll('.form');
 const form_join = document.querySelector('#join');
 const form_game = document.querySelector('#game');
 const word = document.querySelector('#word');
+const input_form = document.querySelector('#userInput');
+const room = document.querySelector('#room');
+
 forms.forEach(form => {
   form.addEventListener('submit', (event) => {
 
@@ -18,7 +21,8 @@ forms.forEach(form => {
     if (form.id == 'join') {
       event.preventDefault();
       const player_name = event.target.newPlayer.value;
-      socket.emit('newPlayer', player_name);
+      const room_name = event.target.room.value;
+      socket.emit('newPlayer', player_name, room_name);
       // Switch the join form to the game form & change wording displayed
       const tl = gsap.timeline();
       tl.to(form_join, { duration: 0.5, opacity: 0, display: 'none', onStart: wordFadingOut, onComplete: wordChange });
@@ -53,7 +57,6 @@ forms.forEach(form => {
 const forfeitBtn = document.querySelector('#forfeit');
 if (forfeitBtn) {
   forfeitBtn.addEventListener('click', () => {
-    // Game over
     gameOver();
   })
 }
@@ -62,6 +65,14 @@ if (forfeitBtn) {
 // Display & update players list
 socket.on('playersList', (players) => {
   updatePlayersList(players);
+})
+
+// Starts the game
+socket.on('gameStart', (players_in_room) => {
+  if (players_in_room[0].id == socket.id) {
+    input_form.removeAttribute('disabled');
+    input_form.setAttribute('placeholder', 'Think quick & enter your word!');
+  }
 })
 
 
@@ -80,6 +91,7 @@ socket.on('wordValidation', (word_validation) => {
     word.style.color = 'green';
   }
 })
+
 
 // Display the list of previously used words
 socket.on('previousWords', (previous_words) => {

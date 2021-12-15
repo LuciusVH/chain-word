@@ -1,5 +1,13 @@
 /* 
 
+ *_____ TURNS LOGIC _____*
+ 
+*/
+
+
+
+/* 
+
  *_____ WORD VALIDATION LOGIC _____*
  
 */
