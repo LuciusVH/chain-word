@@ -1,23 +1,51 @@
 const { displayWords, gameOver } = require("./game");
 const { updatePlayersList } = require("./players");
+const { gsap } = require("gsap/dist/gsap");
+
 
 const socket = io();
+const input_form = document.querySelector('#userInput');
 
 // Target the forms and place an event listener on each form submission
-const form = document.querySelector('.form');
-form.addEventListener('submit', (event) => {
+const forms = document.querySelectorAll('.form');
+const form_join = document.querySelector('#join');
+const form_game = document.querySelector('#game');
+const word = document.querySelector('#word');
+forms.forEach(form => {
+  form.addEventListener('submit', (event) => {
 
-  // Target the input value & send it to the server, clear the input field
-  if (form.id == 'join') {
-    const player_name = event.target.newPlayer.value;
-    const room = event.target.room.value;
-    socket.emit('newPlayer', player_name, room);
-  } else if (form.id == 'game') {
-    event.preventDefault();
-    const user_input = event.target.userInput.value;
-    socket.emit('userInput', user_input);
-    form.reset();
-  }
+    // Target the input value & send it to the server, clear the input field
+    if (form.id == 'join') {
+      event.preventDefault();
+      const player_name = event.target.newPlayer.value;
+      socket.emit('newPlayer', player_name);
+      // Switch the join form to the game form & change wording displayed
+      const tl = gsap.timeline();
+      tl.to(form_join, { duration: 0.5, opacity: 0, display: 'none', onStart: wordFadingOut, onComplete: wordChange });
+
+      function wordFadingOut() {
+        gsap.to(word, { duration: 0.5, opacity: 0 })
+      }
+
+      function wordChange() {
+        word.innerText = 'waiting for another player';
+      }
+      tl.to(form_game, { display: 'block', onStart: wordFadingIn });
+
+      function wordFadingIn() {
+        gsap.to(word, { duration: 0.5, opacity: 1 })
+      }
+
+      tl.to(form_game, { duration: 0.5, opacity: 1 });
+
+    } else if (form.id == 'game') {
+      event.preventDefault();
+      const user_input = event.target.userInput.value;
+      socket.emit('userInput', user_input);
+      form.reset();
+      input_form.setAttribute('disabled', true);
+    }
+  })
 })
 
 
@@ -33,7 +61,6 @@ if (forfeitBtn) {
 
 // Display & update players list
 socket.on('playersList', (players) => {
-  console.log('EVENT FIRED FROM CLIENT SIDE'); // Not fired
   updatePlayersList(players);
 })
 

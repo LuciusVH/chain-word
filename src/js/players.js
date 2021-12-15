@@ -1,8 +1,9 @@
-const players = [];
+let players = [];
 
 // Create player
-function createPlayer(id, name, score, room) {
-  const player = { id, name, score, room };
+function createPlayer(id, name, score) {
+  const player = { id, name, score };
+  console.log(player.id)
   players.push(player);
   return player;
 }
@@ -10,16 +11,8 @@ function createPlayer(id, name, score, room) {
 
 // Update players list
 function updatePlayersList(players) {
-  console.log('EVENT CALLED'); // Not called
   const players_list = document.getElementById('players_list');
-  console.log(players_list);
   players_list.innerHTML = players.map(player => `<li>${player.name} - ${player.score}</li>`).join('');
-}
-
-
-// Get room players
-function getRoomPlayers(room) {
-  return players.filter(player => player.room === room);
 }
 
 
@@ -29,11 +22,15 @@ function getCurrentPlayer(id) {
 }
 
 
-// Exports
+/* 
+
+ *_____ EXPORTS _____*
+ 
+*/
+
 module.exports = {
   players,
   createPlayer,
   updatePlayersList,
-  getRoomPlayers,
   getCurrentPlayer
 }

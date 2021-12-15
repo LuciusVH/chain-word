@@ -14,14 +14,20 @@
 
     <div id="game-canvas">
       <h1>Word Chain Game</h1>
+      <ul id="players_list">
+        <!-- Players list goes here -->
+      </ul>
       <div id="game-wrapper">
         <div id="word">hello! ✌️</div>
-        <form id="join" class="form" action="/game" method="POST">
+        <form id="join" class="form">
           <label for="newPlayer"></label>
           <input type="text" id="newPlayer" name="newPlayer" placeholder="What's your name? :)" required autofocus>
-          <label for="room"></label>
-          <input type="text" id="room" name="room" placeholder="Room token" required>
           <button>Join the game</button>
+        </form>
+        <form id="game" class="form">
+          <label for="userInput"></label>
+          <input type="text" id="userInput" name="userInput" required autofocus disabled>
+          <button type="submit" id="submit">Submit</button> <button type="button" id="forfeit">Forfeit</button>
         </form>
       </div>
     </div>

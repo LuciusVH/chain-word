@@ -1,6 +1,6 @@
 /* 
 
- *_____ GAME LOGIC _____* 
+ *_____ WORD VALIDATION LOGIC _____*
  
 */
 
@@ -9,7 +9,6 @@ let previous_words = [];
 
 function wordStorage(user_input) {
   previous_words.push(user_input);
-  console.log(previous_words)
   return previous_words;
 }
 
@@ -36,13 +35,18 @@ function wordValidation(user_input) {
   // Otherwise it's all good :)
   else {
     wordStorage(user_input);
-    return user_input
+    return user_input;
   }
 }
 
 
-// Game over
-const Swal = require('sweetalert2')
+/* 
+
+ *_____ GAME OVER _____*
+ 
+*/
+
+const Swal = require('sweetalert2');
 
 function gameOver() {
   Swal.fire({
@@ -62,10 +66,14 @@ function gameOver() {
 }
 
 
-// Exports
+/* 
+
+ *_____ EXPORTS _____*
+ 
+*/
+
 module.exports = {
   wordValidation,
-  wordStorage,
   previous_words,
   displayWords,
   gameOver

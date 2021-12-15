@@ -35,6 +35,29 @@ h1 {
   margin: 0.6rem;
 }
 
+// ANIMATIONS
+@keyframes slide-in-fwd-center {
+  0% {
+    transform: translateZ(-1400px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateZ(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-out-fwd-center {
+  0% {
+    transform: translateZ(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateZ(600px);
+    opacity: 0;
+  }
+}
+
 // GAME CANVAS
 #game-canvas {
   width: 350px;
@@ -68,6 +91,9 @@ h1 {
     form {
       width: 100%;
       text-align: center;
+      &#game {
+        display: none;
+      }
       input {
         border: none;
         padding: 0.5rem;
