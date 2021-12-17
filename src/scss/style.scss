@@ -21,6 +21,10 @@ $secondary: hsla(33,
 90%,
 55%,
 1);
+$secondary-disabled: hsla(33,
+90%,
+55%,
+0.5);
 body {
   height: 100vh;
   width: 100vw;
@@ -59,7 +63,7 @@ h1 {
 }
 
 // GAME CANVAS
-#game-canvas {
+#game_canvas {
   width: 350px;
   height: fit-content;
   min-height: 50vh;
@@ -67,20 +71,28 @@ h1 {
   padding: 1rem;
   border-radius: 1rem;
   text-align: center;
+  #room_name {
+    opacity: 0;
+  }
   #players,
   #players_list {
     display: grid;
     align-items: center;
-    grid-template-columns: repeat(3, auto);
+    grid-template-columns: repeat(2, auto);
     padding: 0;
     margin: 0;
     height: 65px;
+    opacity: 0;
     li {
       display: inline;
       margin: 0 0.25rem;
     }
+    .current-player {
+      border: 2px solid black;
+      border-radius: 1rem;
+    }
   }
-  #game-wrapper {
+  #game_wrapper {
     position: grid;
     justify-content: center;
     align-content: center;
@@ -118,6 +130,9 @@ h1 {
         margin: 1rem 0.5rem;
         border-radius: 10px;
         background-color: $secondary;
+        &:disabled {
+          background-color: $secondary-disabled;
+        }
         &#forfeit {
           background-color: hsl(208, 8%, 47%);
         }

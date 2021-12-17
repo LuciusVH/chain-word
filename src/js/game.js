@@ -1,23 +1,29 @@
 /* 
 
- *_____ TURNS LOGIC _____*
- 
-*/
-
-
-
-/* 
-
  *_____ WORD VALIDATION LOGIC _____*
  
 */
 
+
 // Store the validated words in an array
 let previous_words = [];
 
-function wordStorage(user_input) {
-  previous_words.push(user_input);
+function wordStorage(word) {
+  previous_words.push(word);
+  console.log(previous_words);
   return previous_words;
+}
+
+
+// Pick a random first word for the game to start
+function randomWord() {
+  const fs = require('fs');
+  const wordListPath = require('word-list');
+  const wordsArray = fs.readFileSync(wordListPath, 'utf8').split('\n');
+  var random = Math.floor(Math.random() * wordsArray.length);
+  let first_word = wordsArray[random];
+  wordStorage(first_word);
+  return first_word;
 }
 
 
@@ -50,9 +56,36 @@ function wordValidation(user_input) {
 
 /* 
 
- *_____ GAME OVER _____*
+ *_____ GAME START & OVER & WINNER _____*
  
 */
+
+function gameStart(first_word) {
+  // Display a countdown before the game actually starts
+  const { gsap } = require("gsap/dist/gsap");
+  const tl = gsap.timeline();
+  const word = document.querySelector('#word');
+  let countDown = 3;
+  word.innerHTML = countDown;
+
+  tl.fromTo(
+    word, { scale: 3, opacity: 1 }, { duration: 1, scale: 1, opacity: 0, repeat: countDown, onRepeat: updateNum }
+  );
+  tl.fromTo(
+    word, { opacity: 0 }, { duration: 0.25, opacity: 1, onStart: wording }
+  );
+
+  function updateNum() {
+    word.innerHTML = --countDown;
+    if (countDown == 0) {
+      word.innerHTML = 'go!';
+    }
+  }
+
+  function wording() {
+    word.innerText = first_word;
+  }
+}
 
 const Swal = require('sweetalert2');
 
@@ -62,8 +95,11 @@ function gameOver() {
     text: 'Wanna replay?',
     icon: 'error',
     confirmButtonText: 'Yes sir!',
-    confirmButtonColor: '#F49725',
+    confirmButtonColor: 'hsl(33, 90%, 55%)',
     allowOutsideClick: false,
+    showCancelButton: true,
+    cancelButtonText: "I'm good, ciao!",
+    cancelButtonColor: 'hsl(208, 8%, 47%)',
     allowEscapeKey: false
   }).then((result) => {
     if (result.isConfirmed) {
@@ -74,6 +110,21 @@ function gameOver() {
 }
 
 
+function winner() {
+  Swal.fire({
+    title: 'Winner winner baby',
+    text: 'Congrats!',
+    iconHtml: '<img style="max-width: 250%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);" src="https://i.pinimg.com/originals/87/6f/ab/876fab6207f93c293ae77a70f188c402.gif">',
+    confirmButtonText: 'Replay',
+    confirmButtonColor: 'hsl(33, 90%, 55%)',
+    showCancelButton: true,
+    cancelButtonText: "Nah, I keep the win",
+    cancelButtonColor: 'hsl(208, 8%, 47%)',
+    allowOutsideClick: false,
+    allowEscapeKey: false
+  })
+}
+
 /* 
 
  *_____ EXPORTS _____*
@@ -81,8 +132,11 @@ function gameOver() {
 */
 
 module.exports = {
+  randomWord,
   wordValidation,
   previous_words,
   displayWords,
-  gameOver
+  gameStart,
+  gameOver,
+  winner
 }

@@ -12,24 +12,27 @@
 
   <body>
 
-    <div id="game-canvas">
+    <div id="game_canvas">
       <h1>Word Chain Game</h1>
+      <p id="room_name">Room:
+        <!-- Room's name goes here -->
+      </p>
       <ul id="players_list">
         <!-- Players list goes here -->
       </ul>
-      <div id="game-wrapper">
+      <div id="game_wrapper">
         <div id="word">hello! ✌️</div>
         <form id="join" class="form">
-          <label for="newPlayer"></label>
-          <input type="text" id="newPlayer" name="newPlayer" placeholder="What's your name? :)" required autofocus>
+          <label for="new_player"></label>
+          <input type="text" id="new_player" name="new_player" placeholder="What's your name? :)" required autofocus>
           <label for="room"></label>
           <input type="text" id="room" name="room" placeholder="Room name" required>
           <button>Join the game</button>
         </form>
         <form id="game" class="form">
-          <label for="userInput"></label>
-          <input type="text" id="userInput" name="userInput" required autofocus disabled>
-          <button type="submit" id="submit">Submit</button> <button type="button" id="forfeit">Forfeit</button>
+          <label for="user_input"></label>
+          <input type="text" id="user_input" name="user_input" required autofocus disabled>
+          <button type="submit" id="submit" disabled>Submit</button> <button type="button" id="forfeit">Forfeit</button>
         </form>
       </div>
       <ul id="used_words">
