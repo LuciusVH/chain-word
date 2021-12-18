@@ -74,7 +74,7 @@ io.on('connection', socket => {
   socket.on('existingRoom_newPlayer', (player_name, room) => {
 
     // Call on player creation
-    createPlayer(socket.id, player_name, 0, room);
+    const player = createPlayer(socket.id, player_name, 0, room);
     socket.join(room);
 
     // Get the players data for those present in the room
@@ -85,19 +85,17 @@ io.on('connection', socket => {
 
     // Check if the required number of players has yet joined the room
     if (players_in_room.length < room_data.nb_players) {
-      io.to(room).emit('waitingForMorePlayers', players_in_room);
+      io.to(player.id).emit('waitingForMorePlayers');
     }
 
     // Send players list update for display to all clients in the room
     io.to(room).emit('playersList', players_in_room);
 
     // Start the game if the required nb of players has joined the same room:
-    // Empty the previous_words array
     // Pick a random word to start with 
     // Send gameStart event to all players in the room
     // Activate the turns system after 4s (time of gameStart countdown)
     if (players_in_room.length == room_data.nb_players) {
-      previous_words = [];
       const first_word = randomWord();
       io.to(room).emit('gameStart', first_word);
       setTimeout(() => {
@@ -116,8 +114,7 @@ io.on('connection', socket => {
     // Check how are the active players in the room
     let active_players = getActivePlayersInRoom(room);
 
-    // Stop the timer if the inputted word is invalid
-    // Remove the faulty player from the game array
+    // If the inputted word is invalid, remove the faulty player from the game array
     if (word_validation === 'Invalid word 😞' || word_validation === 'Word already used 😞' || word_validation === 'Nop, not chained 😞') {
       const player = active_players.find(i => i = player_id);
       const player_index = active_players.indexOf(player);
@@ -139,7 +136,7 @@ io.on('connection', socket => {
 
     // Emit the next turn event to the player 
     if (active_players[turn].id == socket.id) {
-      clearTimeout(timeOut);
+      clearTimeout(time_out);
       nextTurn(room);
     }
   })
@@ -154,7 +151,7 @@ io.on('connection', socket => {
 
 let current_turn = 0;
 let turn = 0;
-let timeOut;
+let time_out;
 const MAX_WAITING = 5000;
 
 
@@ -164,15 +161,15 @@ function nextTurn(room) {
   console.log(`CURRENT TURN: ${current_turn}`)
   let current_player = active_players[turn].id;
 
-  io.to(current_player).emit('yourTurn', current_player);
-  io.to(room).except(current_player).emit('endOfTurn', current_player);
+  io.to(current_player).emit('yourTurn');
+  io.to(room).except(current_player).emit('endOfTurn');
   io.to(room).emit('whoseTurnItIs', current_player);
 
-  triggerTimeout(room);
+  triggerTimeOut(room);
 }
 
-function triggerTimeout(room) {
-  timeOut = setTimeout(() => {
+function triggerTimeOut(room) {
+  time_out = setTimeout(() => {
     getPlayersInRoom(room);
     nextTurn(room);
   }, MAX_WAITING);

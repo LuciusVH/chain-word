@@ -183,13 +183,13 @@ socket.on('gameStart', (first_word) => {
 
 
 // Enable the input field & submit button
-socket.on('yourTurn', (current_player) => {
+socket.on('yourTurn', () => {
   enableInput();
 })
 
 
 // Disable the input field & submit button
-socket.on('endOfTurn', (current_player) => {
+socket.on('endOfTurn', () => {
   disableInput();
 })
 
