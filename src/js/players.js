@@ -1,13 +1,11 @@
 let players = [];
-let game = []
+let active_players = []
 
 // Create player
 function createPlayer(id, name, score, room) {
   const player = { id, name, score, room };
   players.push(player);
-  game.push(player);
-  console.log(`GAME ARRAY:`);
-  console.log(game);
+  active_players.push(player);
   return player;
 }
 
@@ -25,6 +23,12 @@ function getPlayersInRoom(room) {
 }
 
 
+// Get ACTIVE players in the same room (players who haven't lost yet)
+function getActivePlayersInRoom(room) {
+  return active_players.filter(player => player.room === room);
+}
+
+
 /* 
 
  *_____ EXPORTS _____*
@@ -32,8 +36,9 @@ function getPlayersInRoom(room) {
 */
 
 module.exports = {
-  game,
+  active_players,
   createPlayer,
   updatePlayersList,
-  getPlayersInRoom
+  getPlayersInRoom,
+  getActivePlayersInRoom
 }

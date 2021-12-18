@@ -103,6 +103,12 @@ h1 {
     form {
       width: 100%;
       text-align: center;
+      &#create {
+        display: none;
+      }
+      &#join {
+        display: none;
+      }
       &#game {
         display: none;
       }
