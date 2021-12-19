@@ -94,6 +94,7 @@ h1 {
     .not-playing {
       text-decoration: line-through;
       text-decoration-color: $secondary;
+      text-decoration-thickness: 3px;
     }
   }
   #game_wrapper {

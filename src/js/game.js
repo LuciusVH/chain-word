@@ -95,9 +95,7 @@ function gameOver(word_validation) {
     async function invalidWord(word_validation) {
       // Wrong input
       // Definition of the 2 steps
-      //const steps = ['why', 'replay'];
       const Queue = Swal.mixin({
-        //progressSteps: steps,
         confirmButtonText: 'Aw... 😞',
         confirmButtonColor: 'hsl(33, 90%, 55%)',
         showClass: { backdrop: 'swal2-noanimation' },
@@ -130,7 +128,7 @@ function gameOver(word_validation) {
       }).then((result) => {
         if (result.isConfirmed) {
           socket.emit('replay');
-          // replay event to be coded
+          window.location.reload(false);
         }
       })
     }
@@ -150,8 +148,7 @@ function gameOver(word_validation) {
       allowEscapeKey: false
     }).then((result) => {
       if (result.isConfirmed) {
-        socket.emit('replay');
-        // replay event to be coded
+        window.location.reload(false);
       }
     })
   }
@@ -167,11 +164,12 @@ function winner() {
     iconHtml: '<img style="max-width: 250%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);" src="https://i.pinimg.com/originals/87/6f/ab/876fab6207f93c293ae77a70f188c402.gif">',
     confirmButtonText: 'Replay',
     confirmButtonColor: 'hsl(33, 90%, 55%)',
-    showCancelButton: true,
-    cancelButtonText: "Nah, I keep the win",
-    cancelButtonColor: 'hsl(208, 8%, 47%)',
     allowOutsideClick: false,
     allowEscapeKey: false
+  }).then((result) => {
+    if (result.isConfirmed) {
+      window.location.reload(false);
+    }
   })
 }
 
