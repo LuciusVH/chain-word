@@ -59,8 +59,8 @@ function wordValidation(user_input) {
  
 */
 
+// Display a countdown before the game actually starts
 function gameStart(first_word) {
-  // Display a countdown before the game actually starts
   const { gsap } = require("gsap/dist/gsap");
   const tl = gsap.timeline();
   const word = document.querySelector('#word');
@@ -86,33 +86,84 @@ function gameStart(first_word) {
   }
 }
 
+
+// Fired when a player forfeits or submits an invalid word
 const Swal = require('sweetalert2');
 
-function gameOver() {
-  Swal.fire({
-    title: 'Game over',
-    text: 'Wanna replay?',
-    icon: 'error',
-    confirmButtonText: 'Yes sir!',
-    confirmButtonColor: 'hsl(33, 90%, 55%)',
-    allowOutsideClick: false,
-    showCancelButton: true,
-    cancelButtonText: "No, just keep watching!",
-    cancelButtonColor: 'hsl(208, 8%, 47%)',
-    allowEscapeKey: false
-  }).then((result) => {
-    if (result.isConfirmed) {
-      socket.emit('replay');
-      // replay event to be coded
+function gameOver(word_validation) {
+  if (word_validation != undefined) {
+    async function invalidWord(word_validation) {
+      // Wrong input
+      // Definition of the 2 steps
+      //const steps = ['why', 'replay'];
+      const Queue = Swal.mixin({
+        //progressSteps: steps,
+        confirmButtonText: 'Aw... 😞',
+        confirmButtonColor: 'hsl(33, 90%, 55%)',
+        showClass: { backdrop: 'swal2-noanimation' },
+        hideClass: { backdrop: 'swal2-noanimation' }
+      })
+
+      // Step 1: why you lost
+      await Queue.fire({
+        currentProgressStep: 0,
+        title: 'Wait, what went wrong?',
+        text: `${word_validation}`,
+        icon: 'error',
+        allowOutsideClick: false,
+        allowEscapeKey: false
+      })
+
+      // Step 2: do you want to replay?
+      await Queue.fire({
+        currentProgressStep: 1,
+        title: 'Game over',
+        text: 'Wanna replay?',
+        icon: 'error',
+        confirmButtonText: 'Yes sir!',
+        confirmButtonColor: 'hsl(33, 90%, 55%)',
+        showCancelButton: true,
+        cancelButtonText: "No, just keep watching!",
+        cancelButtonColor: 'hsl(208, 8%, 47%)',
+        allowOutsideClick: false,
+        allowEscapeKey: false
+      }).then((result) => {
+        if (result.isConfirmed) {
+          socket.emit('replay');
+          // replay event to be coded
+        }
+      })
     }
-  })
+    invalidWord(word_validation);
+  } else {
+    // Forfeit
+    Swal.fire({
+      title: 'Game over',
+      text: 'Wanna replay?',
+      icon: 'error',
+      confirmButtonText: 'Yes sir!',
+      confirmButtonColor: 'hsl(33, 90%, 55%)',
+      showCancelButton: true,
+      cancelButtonText: "No, just keep watching!",
+      cancelButtonColor: 'hsl(208, 8%, 47%)',
+      allowOutsideClick: false,
+      allowEscapeKey: false
+    }).then((result) => {
+      if (result.isConfirmed) {
+        socket.emit('replay');
+        // replay event to be coded
+      }
+    })
+  }
+
 }
 
 
+// Called on the last player 🏆
 function winner() {
   Swal.fire({
     title: 'Winner winner baby',
-    text: 'Congrats!',
+    text: 'Congrats! 🏆',
     iconHtml: '<img style="max-width: 250%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);" src="https://i.pinimg.com/originals/87/6f/ab/876fab6207f93c293ae77a70f188c402.gif">',
     confirmButtonText: 'Replay',
     confirmButtonColor: 'hsl(33, 90%, 55%)',
@@ -123,6 +174,7 @@ function winner() {
     allowEscapeKey: false
   })
 }
+
 
 /* 
 

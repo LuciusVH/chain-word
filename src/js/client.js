@@ -118,7 +118,7 @@ forms.forEach(form => {
     } else if (form.id == 'game') {
       event.preventDefault();
       const room = document.querySelector('#room_name').innerText.substring(6);
-      const user_input = event.target.user_input.value;
+      const user_input = event.target.user_input.value.toLowerCase();
       socket.emit('userInput', socket.id, user_input, room);
       form.reset();
       disableInput();
@@ -145,9 +145,9 @@ function waiting() {
 
 // Disabled the input field & submit button
 function disableInput() {
+  input_form.value = '';
   submit_btn.setAttribute('disabled', true);
   input_form.setAttribute('disabled', true);
-  input_form.innerText = '';
   input_form.removeAttribute('placeholder');
 }
 
@@ -209,19 +209,15 @@ socket.on('whoseTurnItIs', (current_player) => {
 
 
 // Display the inputed word on screen
-socket.on('wordValidation', (word_validation) => {
-  const word = document.querySelector("#word");
+socket.on('validWord', (word_validation) => {
   word.innerText = word_validation;
-  // If the word in invalid, display the error message in red & fire the gameOver function
-  if (word_validation === 'Invalid word 😞' || word_validation === 'Word already used 😞' || word_validation === 'Nop, not chained 😞') {
-    word.style.color = 'red';
-    // Game over
-    //gameOver();
+  word.style.color = 'green';
+})
 
-    // Otherwise display the word in green
-  } else {
-    word.style.color = 'green';
-  }
+
+// GameOver event
+socket.on('gameOver', (word_validation) => {
+  gameOver(word_validation);
 })
 
 

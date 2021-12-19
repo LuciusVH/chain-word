@@ -55,9 +55,6 @@ io.on('connection', socket => {
 
     // Call on player creation & have the player join the newly created room
     const player = createPlayer(socket.id, player_name, 0, room, true);
-    console.log('----------------------');
-    console.log('PLAYER CREATED FROM CREATING');
-    console.log(player);
     socket.join(room);
 
     // Add a 'rooms' property to the server, for later use
@@ -77,9 +74,6 @@ io.on('connection', socket => {
 
     // Call on player creation
     const player = createPlayer(socket.id, player_name, 0, room, true);
-    console.log('----------------------');
-    console.log('PLAYER CREATED FROM JOINING');
-    console.log(player);
     socket.join(room);
 
     // Get the players data for those present in the room
@@ -123,25 +117,24 @@ io.on('connection', socket => {
     // If the inputted word is invalid, remove the faulty player from the active_players array
     if (word_validation === 'Invalid word 😞' || word_validation === 'Word already used 😞' || word_validation === 'Nop, not chained 😞') {
       removePlayer(player_id);
-
-      // Last player staying in the game array is the winner
-      // Delete the room from the server params
-      if (active_players.length == 1) {
-        io.to(active_players[0].id).emit('winner');
-        deleteRoom(room);
-      }
+      // Send the gameOver event to the faulty player
+      io.to(player_id).emit('gameOver', word_validation);
+      // Update players list for all players in the room
+      const players_in_room = getPlayersInRoom(room);
+      io.to(room).emit('playersList', players_in_room);
+      lastPlayer(active_players, room);
     } else {
-      // Increment the score of the player & update the display
+      // If the word is valid, increment the score of the player & update the display
       let player = active_players.find(i => i.id == player_id);
       player.score += 1;
       io.to(room).emit('playersList', players_in_room);
-    }
 
-    // Send the word & its validation to all clients in the room
-    io.to(room).emit('wordValidation', word_validation);
-    if (previous_words.length > 1) {
-      // Show the previously used words if there are more than 1 word used to all clients in the room
-      io.to(room).emit('previousWords', previous_words);
+      // Send the word to all clients in the room
+      io.to(room).emit('validWord', word_validation);
+      if (previous_words.length > 1) {
+        // Show the previously used words if there are more than 1 word used to all clients in the room
+        io.to(room).emit('previousWords', previous_words);
+      }
     }
 
     // Emit the next turn event to the player 
@@ -156,6 +149,8 @@ io.on('connection', socket => {
     removePlayer(player_id);
     const players_in_room = getPlayersInRoom(room);
     io.to(room).emit('playersList', players_in_room);
+    let active_players = getActivePlayersInRoom(room);
+    lastPlayer(active_players, room);
   })
 })
 
@@ -190,6 +185,21 @@ function triggerTimeOut(room) {
     getPlayersInRoom(room);
     nextTurn(room);
   }, MAX_WAITING);
+}
+
+
+/*
+
+  *_____ GAME FUNCTIONS _____*
+
+*/
+
+// Check if there's only one player left, making them the winner 🏆
+function lastPlayer(active_players, room) {
+  if (active_players.length == 1) {
+    io.to(active_players[0].id).emit('winner');
+    deleteRoom(room);
+  }
 }
 
 

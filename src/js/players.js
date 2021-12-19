@@ -10,7 +10,7 @@ function createPlayer(id, name, score, room, playing) {
 
 // Switch playing to false when player has given a wrong answer or has forfeited
 function removePlayer(id) {
-  const player = players.find(i => i.id = id);
+  const player = players.find(i => i.id == id);
   player.playing = false;
   return players;
 }
@@ -19,26 +19,14 @@ function removePlayer(id) {
 // Update players list
 function updatePlayersList(players) {
   const players_list = document.getElementById('players_list');
-  //players_list.innerHTML = players.map(player => `<li id="${player.id}">${player.name} - ${player.score}</li>`).join('');
-
 
   players_list.innerHTML = players.map(player => {
     if (player.playing) {
-      return `<li id="${player.id}">${player.name} - ${player.score}</li>`;
+      return `<li id="${player.id}">&nbsp;${player.name}&nbsp; - &nbsp;${player.score}&nbsp;</li>`;
     } else {
-      return `<li id="${player.id}" class="not-playing">${player.name} - ${player.score}</li>`;
+      return `<li id="${player.id}" class="not-playing">&nbsp;${player.name}&nbsp; - &nbsp;${player.score}&nbsp;</li>`;
     }
   }).join('');
-
-  /*
-  players_list.innerHTML = players.forEach(player => {
-    if (player.playing) {
-      `<li id="${player.id}">${player.name} - ${player.score}</li>`
-    } else {
-      `<li id="${player.id}" class="not-playing">${player.name} - ${player.score}</li>`
-    }
-  }).join('');
-*/
 }
 
 
