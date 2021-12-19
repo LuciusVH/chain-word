@@ -113,17 +113,12 @@ io.on('connection', socket => {
   socket.on('userInput', (player_id, user_input, room) => {
     // Call on word validation
     let word_validation = wordValidation(user_input);
-    console.log(`PREVIOUS WORDS:`);
-    console.log(previous_words);
 
     // Check who are the players in the room
     let players_in_room = getPlayersInRoom(room);
 
     // Check who are the active players in the room
     let active_players = getActivePlayersInRoom(room);
-    console.log('------------------------');
-    console.log('ACTIVE PLAYERS IN THE ROOM:');
-    console.log(active_players);
 
     // If the inputted word is invalid, remove the faulty player from the active_players array
     if (word_validation === 'Invalid word 😞' || word_validation === 'Word already used 😞' || word_validation === 'Nop, not chained 😞') {
@@ -137,7 +132,7 @@ io.on('connection', socket => {
       }
     } else {
       // Increment the score of the player & update the display
-      let player = active_players.find(i => i.id = player_id);
+      let player = active_players.find(i => i.id == player_id);
       player.score += 1;
       io.to(room).emit('playersList', players_in_room);
     }
