@@ -1,19 +1,44 @@
 let players = [];
-let active_players = []
 
 // Create player
-function createPlayer(id, name, score, room) {
-  const player = { id, name, score, room };
+function createPlayer(id, name, score, room, playing) {
+  const player = { id: id, name: name, score: score, room: room, playing: playing };
   players.push(player);
-  active_players.push(player);
   return player;
+}
+
+
+// Switch playing to false when player has given a wrong answer or has forfeited
+function removePlayer(id) {
+  const player = players.find(i => i.id = id);
+  player.playing = false;
+  return players;
 }
 
 
 // Update players list
 function updatePlayersList(players) {
   const players_list = document.getElementById('players_list');
-  players_list.innerHTML = players.map(player => `<li id="${player.id}">${player.name} - ${player.score}</li>`).join('');
+  //players_list.innerHTML = players.map(player => `<li id="${player.id}">${player.name} - ${player.score}</li>`).join('');
+
+
+  players_list.innerHTML = players.map(player => {
+    if (player.playing) {
+      return `<li id="${player.id}">${player.name} - ${player.score}</li>`;
+    } else {
+      return `<li id="${player.id}" class="not-playing">${player.name} - ${player.score}</li>`;
+    }
+  }).join('');
+
+  /*
+  players_list.innerHTML = players.forEach(player => {
+    if (player.playing) {
+      `<li id="${player.id}">${player.name} - ${player.score}</li>`
+    } else {
+      `<li id="${player.id}" class="not-playing">${player.name} - ${player.score}</li>`
+    }
+  }).join('');
+*/
 }
 
 
@@ -25,7 +50,7 @@ function getPlayersInRoom(room) {
 
 // Get ACTIVE players in the same room (players who haven't lost yet)
 function getActivePlayersInRoom(room) {
-  return active_players.filter(player => player.room === room);
+  return players.filter(player => player.room == room && player.playing == true);
 }
 
 
@@ -36,8 +61,8 @@ function getActivePlayersInRoom(room) {
 */
 
 module.exports = {
-  active_players,
   createPlayer,
+  removePlayer,
   updatePlayersList,
   getPlayersInRoom,
   getActivePlayersInRoom

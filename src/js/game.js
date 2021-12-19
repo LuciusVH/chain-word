@@ -10,7 +10,6 @@ let previous_words = [];
 
 function wordStorage(word) {
   previous_words.push(word);
-  console.log(previous_words);
   return previous_words;
 }
 
@@ -98,7 +97,7 @@ function gameOver() {
     confirmButtonColor: 'hsl(33, 90%, 55%)',
     allowOutsideClick: false,
     showCancelButton: true,
-    cancelButtonText: "I'm good, ciao!",
+    cancelButtonText: "No, just keep watching!",
     cancelButtonColor: 'hsl(208, 8%, 47%)',
     allowEscapeKey: false
   }).then((result) => {

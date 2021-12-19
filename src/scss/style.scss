@@ -91,6 +91,10 @@ h1 {
       border: 2px solid black;
       border-radius: 1rem;
     }
+    .not-playing {
+      text-decoration: line-through;
+      text-decoration-color: $primary;
+    }
   }
   #game_wrapper {
     position: grid;

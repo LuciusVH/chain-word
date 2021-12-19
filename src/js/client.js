@@ -147,6 +147,7 @@ function waiting() {
 function disableInput() {
   submit_btn.setAttribute('disabled', true);
   input_form.setAttribute('disabled', true);
+  input_form.innerText = '';
   input_form.removeAttribute('placeholder');
 }
 
@@ -164,6 +165,8 @@ const forfeitBtn = document.querySelector('#forfeit');
 if (forfeitBtn) {
   forfeitBtn.addEventListener('click', () => {
     gameOver();
+    const room = document.querySelector('#room_name').innerText.substring(6);
+    socket.emit('forfeit', socket.id, room);
   })
 }
 

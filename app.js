@@ -17,9 +17,8 @@ const io = require('socket.io')(server, {
 
 const { randomWord, wordValidation } = require('./src/js/game');
 let { previous_words } = require('./src/js/game');
-const { createPlayer, getPlayersInRoom, getActivePlayersInRoom } = require('./src/js/players');
-let { active_players, players } = require('./src/js/players');
-const { createRoom } = require('./src/js/rooms');
+const { createPlayer, removePlayer, getPlayersInRoom, getActivePlayersInRoom } = require('./src/js/players');
+const { createRoom, deleteRoom } = require('./src/js/rooms');
 let { rooms } = require('./src/js/rooms');
 
 // Express static files
@@ -55,7 +54,10 @@ io.on('connection', socket => {
   socket.on('newRoom_newPlayer', (player_name, room, expected_nb_players) => {
 
     // Call on player creation & have the player join the newly created room
-    createPlayer(socket.id, player_name, 0, room);
+    const player = createPlayer(socket.id, player_name, 0, room, true);
+    console.log('----------------------');
+    console.log('PLAYER CREATED FROM CREATING');
+    console.log(player);
     socket.join(room);
 
     // Add a 'rooms' property to the server, for later use
@@ -74,7 +76,10 @@ io.on('connection', socket => {
   socket.on('existingRoom_newPlayer', (player_name, room) => {
 
     // Call on player creation
-    const player = createPlayer(socket.id, player_name, 0, room);
+    const player = createPlayer(socket.id, player_name, 0, room, true);
+    console.log('----------------------');
+    console.log('PLAYER CREATED FROM JOINING');
+    console.log(player);
     socket.join(room);
 
     // Get the players data for those present in the room
@@ -111,20 +116,30 @@ io.on('connection', socket => {
     console.log(`PREVIOUS WORDS:`);
     console.log(previous_words);
 
-    // Check how are the active players in the room
-    let active_players = getActivePlayersInRoom(room);
+    // Check who are the players in the room
+    let players_in_room = getPlayersInRoom(room);
 
-    // If the inputted word is invalid, remove the faulty player from the game array
+    // Check who are the active players in the room
+    let active_players = getActivePlayersInRoom(room);
+    console.log('------------------------');
+    console.log('ACTIVE PLAYERS IN THE ROOM:');
+    console.log(active_players);
+
+    // If the inputted word is invalid, remove the faulty player from the active_players array
     if (word_validation === 'Invalid word 😞' || word_validation === 'Word already used 😞' || word_validation === 'Nop, not chained 😞') {
-      const player = active_players.find(i => i = player_id);
-      const player_index = active_players.indexOf(player);
-      active_players.splice(player_index, 1);
+      removePlayer(player_id);
+
       // Last player staying in the game array is the winner
+      // Delete the room from the server params
       if (active_players.length == 1) {
         io.to(active_players[0].id).emit('winner');
+        deleteRoom(room);
       }
     } else {
-
+      // Increment the score of the player & update the display
+      let player = active_players.find(i => i.id = player_id);
+      player.score += 1;
+      io.to(room).emit('playersList', players_in_room);
     }
 
     // Send the word & its validation to all clients in the room
@@ -140,13 +155,20 @@ io.on('connection', socket => {
       nextTurn(room);
     }
   })
+
+  // Is fired when a player forfeit
+  socket.on('forfeit', (player_id, room) => {
+    removePlayer(player_id);
+    const players_in_room = getPlayersInRoom(room);
+    io.to(room).emit('playersList', players_in_room);
+  })
 })
 
 
 /* 
 
- *_____ TURNS LOGIC _____*
- 
+  *_____ TURNS LOGIC _____*
+  
 */
 
 let current_turn = 0;
@@ -158,7 +180,7 @@ const MAX_WAITING = 5000;
 function nextTurn(room) {
   let active_players = getActivePlayersInRoom(room);
   turn = current_turn++ % active_players.length;
-  console.log(`CURRENT TURN: ${current_turn}`)
+  //console.log(`CURRENT TURN: ${current_turn}`);
   let current_player = active_players[turn].id;
 
   io.to(current_player).emit('yourTurn');
@@ -178,7 +200,7 @@ function triggerTimeOut(room) {
 
 /*
 
- *_____ NODE SERVER _____*
+  *_____ NODE SERVER _____*
 
 */
 

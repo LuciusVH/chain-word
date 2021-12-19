@@ -7,7 +7,7 @@
     "start": "node app.js",
     "startDev": "nodemon app.js",
     "sass": "sass -w ./src/scss/:dist/css/ --style compressed",
-    "watch": "watchify ./src/js/client.js ./src/js/game.js ./src/js/db.js  -o ./dist/js/bundle.js -d -t -v babelify"
+    "watch": "watchify ./src/js/client.js ./src/js/game.js ./src/js/rooms.js ./src/js/players.js -o ./dist/js/bundle.js -d -t -v babelify"
   },
   "author": "Richard Lebigot",
   "license": "ISC",
