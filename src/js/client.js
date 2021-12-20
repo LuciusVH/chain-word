@@ -62,7 +62,7 @@ joining_btn.addEventListener('click', (event) => {
 // ROOM CREATION:
 // Listen to user's room input on the join form, to make sure the room entered does not already exists
 create_room_input.addEventListener('change', (event) => {
-  let room_input = event.target.value;
+  let room_input = event.target.value.toLowerCase();
   socket.emit('createRoomCheck', socket.id, room_input);
 })
 
@@ -80,7 +80,7 @@ socket.on('createRoomInvalidated', () => {
 // ROOM JOINING:
 // Listen to user's room input on the join form, to make sure the room entered exists
 join_room_input.addEventListener('change', (event) => {
-  let room_input = event.target.value;
+  let room_input = event.target.value.toLowerCase();
   socket.emit('joinRoomCheck', socket.id, room_input);
 })
 

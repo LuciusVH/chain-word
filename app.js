@@ -129,6 +129,7 @@ io.on('connection', socket => {
   socket.on('userInput', (player_id, user_input, room) => {
     // Call on word validation
     let word_validation = wordValidation(user_input);
+    console.log(previous_words);
 
     // Check who are the players in the room
     let players_in_room = getPlayersInRoom(room);
@@ -144,6 +145,7 @@ io.on('connection', socket => {
       // Update players list for all players in the room
       const players_in_room = getPlayersInRoom(room);
       io.to(room).emit('playersList', players_in_room);
+      active_players = getActivePlayersInRoom(room);
       lastPlayer(active_players, room);
     } else {
       // If the word is valid, increment the score of the player & update the display
