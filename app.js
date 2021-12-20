@@ -50,6 +50,17 @@ app.get('', function(req, res) {
 
 io.on('connection', socket => {
 
+  // When creating a room, check if the room does not already exist
+  socket.on('createRoomCheck', (socket_id, room_name) => {
+    let existing_room = existingRoom(room_name);
+
+    if (existing_room) {
+      io.to(socket_id).emit('createRoomInvalidated');
+    } else {
+      io.to(socket_id).emit('createRoomValidated');
+    }
+  })
+
   // Is fired when a user creates a new room
   socket.on('newRoom_newPlayer', (player_name, room, expected_nb_players) => {
 
@@ -67,6 +78,17 @@ io.on('connection', socket => {
     // Send players list update for display to the newly created room
     let players_in_room = getPlayersInRoom(room);
     io.to(room).emit('playersList', players_in_room);
+  })
+
+  // When joining a room, check if the room does exist
+  socket.on('joinRoomCheck', (socket_id, room_name) => {
+    let existing_room = existingRoom(room_name);
+
+    if (existing_room) {
+      io.to(socket_id).emit('joinRoomValidated');
+    } else {
+      io.to(socket_id).emit('joinRoomInvalidated');
+    }
   })
 
   // Is fired when a user joins an existing room
@@ -193,6 +215,12 @@ function triggerTimeOut(room) {
   *_____ GAME FUNCTIONS _____*
 
 */
+
+// Check if the room already exists
+function existingRoom(room_name) {
+  return rooms.some(room => room.name === room_name);
+}
+
 
 // Check if there's only one player left, making them the winner 🏆
 function lastPlayer(active_players, room) {

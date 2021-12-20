@@ -27,20 +27,20 @@
           <button id="creating_game">Creating</button> <button id="joining_game">Joining</button>
         </form>
         <form id="create" class="form">
-          <label for="new_player"></label>
-          <input type="text" id="new_player" name="new_player" placeholder="What's your name? :)" required autofocus>
-          <label for="room"></label>
-          <input type="text" id="room" name="room" placeholder="Room name" required>
+          <label for="create_new_player"></label>
+          <input type="text" id="create_new_player" name="create_new_player" placeholder="What's your name? :)" required autofocus>
+          <label for="create_room"></label>
+          <input type="text" id="create_room" name="create_room" placeholder="Room name" required>
           <label for="nb_players"></label>
           <input type="number" id="nb_players" name="nb_players" min="2" max="6" placeholder="Number of players? (6 max)" required>
-          <button>Create the game</button>
+          <button disabled>Create the game</button>
         </form>
         <form id="join" class="form">
-          <label for="new_player"></label>
-          <input type="text" id="new_player" name="new_player" placeholder="What's your name? :)" required autofocus>
-          <label for="room"></label>
-          <input type="text" id="room" name="room" placeholder="Room name" required>
-          <button>Join the game</button>
+          <label for="join_new_player"></label>
+          <input type="text" id="join_new_player" name="join_new_player" placeholder="What's your name? :)" required autofocus>
+          <label for="join_room"></label>
+          <input type="text" id="join_room" name="join_room" placeholder="Room name" required>
+          <button disabled>Join the game</button>
         </form>
         <form id="game" class="form">
           <label for="user_input"></label>
