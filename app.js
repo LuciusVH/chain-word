@@ -229,6 +229,7 @@ function lastPlayer(active_players, room) {
   if (active_players.length == 1) {
     io.to(active_players[0].id).emit('winner');
     deleteRoom(room);
+    io.rooms = rooms;
   }
 }
 
